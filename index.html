@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Contactos</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <h1>Agenda de Contactos</h1>
+
+    <section id="contacts-section">
+        <h2>Registro de Contactos</h2>
+
+        <form id="contactForm">
+            <input type="hidden" id="contactId">
+
+            <div>
+                <label for="contactName">Nombre completo:</label>
+                <input type="text" id="contactName" placeholder="Ejemplo: Carlos Ramírez">
+                <small id="contactNameError" class="error-message"></small>
+            </div>
+
+            <div>
+                <label for="contactPhone">Teléfono:</label>
+                <input type="text" id="contactPhone" placeholder="Ejemplo: 7777-8888">
+                <small id="contactPhoneError" class="error-message"></small>
+            </div>
+
+            <div>
+                <label for="contactEmail">Correo electrónico:</label>
+                <input type="email" id="contactEmail" placeholder="Ejemplo: correo@gmail.com">
+                <small id="contactEmailError" class="error-message"></small>
+            </div>
+
+            <div>
+                <label for="contactCategory">Categoría:</label>
+                <select id="contactCategory">
+                    <option value="">Seleccione una categoría</option>
+                    <option value="Familia">Familia</option>
+                    <option value="Trabajo">Trabajo</option>
+                    <option value="Amigos">Amigos</option>
+                    <option value="Universidad">Universidad</option>
+                </select>
+                <small id="contactCategoryError" class="error-message"></small>
+            </div>
+
+            <div>
+                <label for="contactAddress">Dirección:</label>
+                <input type="text" id="contactAddress" placeholder="Ejemplo: Santa Tecla">
+                <small id="contactAddressError" class="error-message"></small>
+            </div>
+
+            <div>
+                <label for="contactStatus">Estado:</label>
+                <select id="contactStatus">
+                    <option value="">Seleccione un estado</option>
+                    <option value="Activo">Activo</option>
+                    <option value="Favorito">Favorito</option>
+                    <option value="Bloqueado">Bloqueado</option>
+                </select>
+                <small id="contactStatusError" class="error-message"></small>
+            </div>
+
+            <button type="submit" id="saveContactButton">Guardar contacto</button>
+            <button type="button" id="cancelEditButton" hidden>Cancelar edición</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>Listado de contactos</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th>Categoría</th>
+                    <th>Dirección</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody id="contactTableBody">
+            </tbody>
+        </table>
+    </section>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
