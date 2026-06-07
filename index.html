@@ -10,6 +10,44 @@
 
     <h1>Agenda de Contactos</h1>
 
+    <section id="dashboard-section">
+        <h2>Dashboard <span id="workerStatus" class="worker-badge">Web Worker activo</span></h2>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-label">Total de contactos</span>
+                <span class="metric-value" id="metricTotal">0</span>
+            </div>
+            <div class="metric-card metric-activo">
+                <span class="metric-label">Activos</span>
+                <span class="metric-value" id="metricActivos">0</span>
+            </div>
+            <div class="metric-card metric-favorito">
+                <span class="metric-label">Favoritos</span>
+                <span class="metric-value" id="metricFavoritos">0</span>
+            </div>
+            <div class="metric-card metric-bloqueado">
+                <span class="metric-label">Bloqueados</span>
+                <span class="metric-value" id="metricBloqueados">0</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Categoría dominante</span>
+                <span class="metric-value metric-value--sm" id="metricTopCategoria">—</span>
+            </div>
+        </div>
+
+        <div class="charts-row">
+            <div class="chart-box">
+                <h3>Por estado</h3>
+                <div id="chartEstado"></div>
+            </div>
+            <div class="chart-box">
+                <h3>Por categoría</h3>
+                <div id="chartCategoria"></div>
+            </div>
+        </div>
+    </section>
+
     <section id="contacts-section">
         <h2>Registro de Contactos</h2>
 
@@ -83,9 +121,7 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-
-            <tbody id="contactTableBody">
-            </tbody>
+            <tbody id="contactTableBody"></tbody>
         </table>
     </section>
 

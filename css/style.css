@@ -69,7 +69,7 @@ button {
 }
 
 .input-error {
-    border: 1px solid red;
+    border: 1px solid red !important;
 }
 
 table {
@@ -78,8 +78,7 @@ table {
     margin-top: 15px;
 }
 
-th,
-td {
+th, td {
     border: 1px solid #ddd;
     padding: 10px;
     text-align: left;
@@ -111,3 +110,169 @@ th {
     color: #777;
     font-style: italic;
 }
+
+/* --- Estado badge en tabla --- */
+
+.status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-activo {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.status-favorito {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-bloqueado {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* --- Dashboard --- */
+
+#dashboard-section h2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.worker-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: normal;
+    padding: 3px 12px;
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+    border-radius: 20px;
+}
+
+.worker-badge::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: #059669;
+    animation: workerPulse 2s ease-in-out infinite;
+}
+
+@keyframes workerPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.metric-card {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.metric-label {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.metric-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1e293b;
+}
+
+.metric-value--sm {
+    font-size: 18px;
+}
+
+.metric-activo .metric-value    { color: #1d72b8; }
+.metric-favorito .metric-value  { color: #d97706; }
+.metric-bloqueado .metric-value { color: #dc2626; }
+
+.charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+@media (max-width: 600px) {
+    .charts-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.chart-box {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.chart-box h3 {
+    font-size: 14px;
+    color: #475569;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.bar-label {
+    min-width: 90px;
+    color: #64748b;
+}
+
+.bar-track {
+    flex: 1;
+    height: 10px;
+    background-color: #e2e8f0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.4s ease;
+}
+
+.bar-count {
+    min-width: 20px;
+    text-align: right;
+    font-weight: bold;
+    color: #1e293b;
+}
+
+.bar-activo    .bar-fill { background-color: #1d72b8; }
+.bar-favorito  .bar-fill { background-color: #d97706; }
+.bar-bloqueado .bar-fill { background-color: #dc2626; }
+.bar-familia   .bar-fill { background-color: #0f766e; }
+.bar-trabajo   .bar-fill { background-color: #1d72b8; }
+.bar-amigos    .bar-fill { background-color: #15803d; }
+.bar-universidad .bar-fill { background-color: #7c3aed; }
