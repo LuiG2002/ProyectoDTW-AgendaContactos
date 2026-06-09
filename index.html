@@ -3,153 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda de Contactos</title>
+    <title>Agenda de Contactos | Sistema de Gestión</title>
+
     <link rel="stylesheet" href="css/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-    <h1>Agenda de Contactos</h1>
-
-    <section id="dashboard-section">
-        <h2>Dashboard <span id="workerStatus" class="worker-badge">Web Worker activo</span></h2>
-
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <span class="metric-label">Total de contactos</span>
-                <span class="metric-value" id="metricTotal">0</span>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">
+                <span class="material-symbols-outlined">contacts</span>
             </div>
-            <div class="metric-card metric-activo">
-                <span class="metric-label">Activos</span>
-                <span class="metric-value" id="metricActivos">0</span>
-            </div>
-            <div class="metric-card metric-favorito">
-                <span class="metric-label">Favoritos</span>
-                <span class="metric-value" id="metricFavoritos">0</span>
-            </div>
-            <div class="metric-card metric-bloqueado">
-                <span class="metric-label">Bloqueados</span>
-                <span class="metric-value" id="metricBloqueados">0</span>
-            </div>
-            <div class="metric-card">
-                <span class="metric-label">Categoría dominante</span>
-                <span class="metric-value metric-value--sm" id="metricTopCategoria">—</span>
+            <div>
+                <h1>Agenda de Contactos</h1>
+                <p>Sistema de gestión centralizado</p>
             </div>
         </div>
 
-        <div class="charts-row">
-            <div class="chart-box">
-                <h3>Por estado</h3>
-                <div id="chartEstado"></div>
-            </div>
-            <div class="chart-box">
-                <h3>Por categoría</h3>
-                <div id="chartCategoria"></div>
-            </div>
-        </div>
-    </section>
+        <button type="button" id="themeToggleButton" class="theme-toggle">
+            <span class="material-symbols-outlined">dark_mode</span>
+            Cambiar tema
+        </button>
+    </header>
 
-    <section id="contacts-section">
-        <h2>Registro de Contactos</h2>
+    <main class="main-layout">
 
-        <form id="contactForm">
-            <input type="hidden" id="contactId">
+        <section id="dashboard-section" class="glass-panel">
+            <div class="section-header">
+                <div>
+                    <h2>Dashboard</h2>
+                    <p>Resumen general de los contactos registrados.</p>
+                </div>
 
-            <div>
-                <input type="text" id="contactName" placeholder="Ejemplo: Diego Mena" maxlength="50" autocomplete="off">
-                <small id="contactNameError" class="error-message"></small>
+                <span id="workerStatus" class="worker-badge">Web Worker activo</span>
             </div>
 
-            <div>
-                <input type="text" id="contactPhone" placeholder="Ejemplo: 7777-8888" maxlength="9" autocomplete="off">
-                <small id="contactPhoneError" class="error-message"></small>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-label">Total Contactos</span>
+                    <span class="metric-value" id="metricTotal">0</span>
+                </div>
+
+                <div class="metric-card metric-activo">
+                    <span class="metric-label">Activos</span>
+                    <span class="metric-value" id="metricActivos">0</span>
+                </div>
+
+                <div class="metric-card metric-favorito">
+                    <span class="metric-label">Favoritos</span>
+                    <span class="metric-value" id="metricFavoritos">0</span>
+                </div>
+
+                <div class="metric-card metric-bloqueado">
+                    <span class="metric-label">Bloqueados</span>
+                    <span class="metric-value" id="metricBloqueados">0</span>
+                </div>
+
+                <div class="metric-card">
+                    <span class="metric-label">Categoría dominante</span>
+                    <span class="metric-value metric-value--sm" id="metricTopCategoria">—</span>
+                </div>
             </div>
 
-            <div>
-                <label for="contactEmail">Correo electrónico:</label>
-                <input type="email" id="contactEmail" placeholder="Ejemplo: correo@gmail.com">
-                <small id="contactEmailError" class="error-message"></small>
+            <div class="charts-row">
+                <div class="chart-box">
+                    <h3>Por estado</h3>
+                    <div id="chartEstado"></div>
+                </div>
+
+                <div class="chart-box">
+                    <h3>Por categoría</h3>
+                    <div id="chartCategoria"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacts-section" class="glass-panel">
+            <div class="section-header">
+                <div>
+                    <h2>Registro de Contactos</h2>
+                    <p>Ingrese los datos del contacto para guardarlo en la agenda.</p>
+                </div>
+
+                <span class="material-symbols-outlined section-icon">person_add</span>
             </div>
 
-            <div>
-                <label for="contactCategory">Categoría:</label>
-                <select id="contactCategory">
-                    <option value="">Seleccione una categoría</option>
-                    <option value="Familia">Familia</option>
-                    <option value="Trabajo">Trabajo</option>
-                    <option value="Amigos">Amigos</option>
-                    <option value="Universidad">Universidad</option>
-                </select>
-                <small id="contactCategoryError" class="error-message"></small>
+            <form id="contactForm" class="contact-form">
+                <input type="hidden" id="contactId">
+
+                <div class="form-group">
+                    <label for="contactName">Nombre completo</label>
+                    <input type="text" id="contactName" placeholder="Ejemplo: Diego Mena" maxlength="50" autocomplete="off">
+                    <small id="contactNameError" class="error-message"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactPhone">Teléfono</label>
+                    <input type="text" id="contactPhone" placeholder="Ejemplo: 7777-8888" maxlength="9" autocomplete="off">
+                    <small id="contactPhoneError" class="error-message"></small>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="contactEmail">Correo electrónico</label>
+                    <input type="email" id="contactEmail" placeholder="Ejemplo: correo@gmail.com">
+                    <small id="contactEmailError" class="error-message"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactCategory">Categoría</label>
+                    <select id="contactCategory">
+                        <option value="">Seleccione una categoría</option>
+                        <option value="Familia">Familia</option>
+                        <option value="Trabajo">Trabajo</option>
+                        <option value="Amigos">Amigos</option>
+                        <option value="Universidad">Universidad</option>
+                    </select>
+                    <small id="contactCategoryError" class="error-message"></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="contactStatus">Estado</label>
+                    <select id="contactStatus">
+                        <option value="">Seleccione un estado</option>
+                        <option value="Activo">Activo</option>
+                        <option value="Favorito">Favorito</option>
+                        <option value="Bloqueado">Bloqueado</option>
+                    </select>
+                    <small id="contactStatusError" class="error-message"></small>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="contactAddress">Dirección</label>
+                    <input type="text" id="contactAddress" placeholder="Ejemplo: Santa Tecla">
+                    <small id="contactAddressError" class="error-message"></small>
+                </div>
+
+                <div class="form-actions full-width">
+                    <button type="submit" id="saveContactButton" class="primary-button">
+                        Guardar contacto
+                    </button>
+
+                    <button type="button" id="cancelEditButton" class="secondary-button" hidden>
+                        Cancelar edición
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section id="api-location-section" class="glass-panel">
+            <div class="section-header">
+                <div>
+                    <h2>API REST, Geolocalización y Almacenamiento Temporal</h2>
+                    <p>Consulta datos externos, ubicación y acciones temporales de sesión.</p>
+                </div>
+
+                <span class="material-symbols-outlined section-icon">api</span>
             </div>
 
-            <div>
-                <label for="contactAddress">Dirección:</label>
-                <input type="text" id="contactAddress" placeholder="Ejemplo: Santa Tecla">
-                <small id="contactAddressError" class="error-message"></small>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Consulta de país</h3>
+                    <p>Ingrese el nombre de un país para consultar información desde una API REST.</p>
+
+                    <div class="inline-actions">
+                        <input type="text" id="countrySearchInput" placeholder="Ejemplo: El Salvador">
+                        <button type="button" onclick="searchCountryInfo()">Buscar país</button>
+                    </div>
+
+                    <div id="apiResult" class="result-box"></div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Geolocalización</h3>
+                    <p>Obtenga la ubicación actual del usuario mediante el navegador.</p>
+
+                    <button type="button" onclick="getUserLocation()" class="secondary-button">
+                        Obtener ubicación
+                    </button>
+
+                    <div id="locationResult" class="result-box"></div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Información temporal de sesión</h3>
+                    <p id="lastActionInfo">No hay acciones recientes en esta sesión.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-panel table-panel">
+            <div class="section-header">
+                <div>
+                    <h2>Listado de contactos</h2>
+                    <p>Los contactos registrados se mostrarán en esta tabla.</p>
+                </div>
+
+                <span class="material-symbols-outlined section-icon">format_list_bulleted</span>
             </div>
 
-            <div>
-                <label for="contactStatus">Estado:</label>
-                <select id="contactStatus">
-                    <option value="">Seleccione un estado</option>
-                    <option value="Activo">Activo</option>
-                    <option value="Favorito">Favorito</option>
-                    <option value="Bloqueado">Bloqueado</option>
-                </select>
-                <small id="contactStatusError" class="error-message"></small>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th>Correo</th>
+                            <th>Categoría</th>
+                            <th>Dirección</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="contactTableBody"></tbody>
+                </table>
             </div>
+        </section>
 
-            <button type="submit" id="saveContactButton">Guardar contacto</button>
-            <button type="button" id="cancelEditButton" hidden>Cancelar edición</button>
-        </form>
-    </section>
+    </main>
 
-    <section id="api-location-section">
-        <h2>API REST, Geolocalización y Almacenamiento Temporal</h2>
+    <footer class="footer">
+        <strong> Agenda de contactos </strong>
+        <span>Sistema de gestión de contactos | Proyecto DTW135</span>
+    </footer>
 
-        <div class="info-card">
-            <h3>Consulta de país</h3>
-            <p>Ingrese el nombre de un país para consultar información desde una API REST.</p>
-
-            <input type="text" id="countrySearchInput" placeholder="Ejemplo: El Salvador">
-            <button type="button" onclick="searchCountryInfo()">Buscar país</button>
-
-            <div id="apiResult"></div>
-        </div>
-
-        <div class="info-card">
-            <h3>Geolocalización</h3>
-            <p>Obtenga la ubicación actual del usuario mediante el navegador.</p>
-
-            <button type="button" onclick="getUserLocation()">Obtener ubicación</button>
-
-            <div id="locationResult"></div>
-        </div>
-
-        <div class="info-card">
-            <h3>Información temporal de sesión</h3>
-            <p id="lastActionInfo">No hay acciones recientes en esta sesión.</p>
-        </div>
-    </section>
-
-    <section>
-        <h2>Listado de contactos</h2>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Teléfono</th>
-                    <th>Correo</th>
-                    <th>Categoría</th>
-                    <th>Dirección</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="contactTableBody"></tbody>
-        </table>
-    </section>
+    <div id="toast" class="toast"></div>
 
     <script src="js/app.js"></script>
 </body>
