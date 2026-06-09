@@ -2,12 +2,48 @@ let contacts = [];
 let editMode = false;
 let currentEditId = null;
 
+const STORAGE_KEY = "agendaContactos";
+const SESSION_KEY = "ultimaAccionAgenda";
+
 const contactForm       = document.getElementById("contactForm");
 const contactTableBody  = document.getElementById("contactTableBody");
 const saveContactButton = document.getElementById("saveContactButton");
 const cancelEditButton  = document.getElementById("cancelEditButton");
 
 const metricsWorker = new Worker("js/metricsWorker.js");
+
+function saveContactsToLocalStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
+}
+
+function loadContactsFromLocalStorage() {
+    const storedContacts = localStorage.getItem(STORAGE_KEY);
+
+    if (storedContacts) {
+        try {
+            contacts = JSON.parse(storedContacts);
+        } catch (error) {
+            console.error("Error al cargar contactos desde localStorage:", error);
+            contacts = [];
+            localStorage.removeItem(STORAGE_KEY);
+        }
+    }
+}
+
+function saveLastAction(action) {
+    sessionStorage.setItem(SESSION_KEY, action);
+}
+
+function showLastAction() {
+    const lastActionElement = document.getElementById("lastActionInfo");
+    if (!lastActionElement) return;
+
+    const lastAction = sessionStorage.getItem(SESSION_KEY);
+
+    lastActionElement.textContent = lastAction
+        ? `Última acción realizada: ${lastAction}`
+        : "No hay acciones recientes en esta sesión.";
+}
 
 metricsWorker.onmessage = function (event) {
     updateDashboardUI(event.data);
@@ -84,8 +120,12 @@ function addContact() {
     contact.id = Date.now();
     contacts.push(contact);
 
+    saveContactsToLocalStorage();
+    saveLastAction("Se agregó un nuevo contacto.");
+
     renderContacts();
     requestMetricsUpdate();
+    showLastAction();
     clearForm();
     clearErrors();
 }
@@ -108,8 +148,12 @@ function updateContact() {
 
     contacts[index] = updatedContact;
 
+    saveContactsToLocalStorage();
+    saveLastAction("Se actualizó un contacto.");
+
     renderContacts();
     requestMetricsUpdate();
+    showLastAction();
     clearForm();
     clearErrors();
     cancelEdit();
@@ -124,8 +168,12 @@ function deleteContact(id) {
             return c.id !== id;
         });
 
+        saveContactsToLocalStorage();
+        saveLastAction("Se eliminó un contacto.");
+
         renderContacts();
         requestMetricsUpdate();
+        showLastAction();
 
         if (currentEditId === id) cancelEdit();
 
@@ -192,17 +240,31 @@ function getFormData() {
 
 function validateContact(contact) {
     clearErrors();
+
     let isValid = true;
+
+    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    const phoneRegex = /^[0-9]{4}-?[0-9]{4}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (contact.name === "") {
         showError("contactName", "contactNameError", "El nombre es obligatorio.");
+        isValid = false;
+    } else if (contact.name.length < 3) {
+        showError("contactName", "contactNameError", "El nombre debe tener al menos 3 caracteres.");
+        isValid = false;
+    } else if (contact.name.length > 50) {
+        showError("contactName", "contactNameError", "El nombre no debe superar los 50 caracteres.");
+        isValid = false;
+    } else if (!nameRegex.test(contact.name)) {
+        showError("contactName", "contactNameError", "El nombre solo debe contener letras y espacios.");
         isValid = false;
     }
 
     if (contact.phone === "") {
         showError("contactPhone", "contactPhoneError", "El teléfono es obligatorio.");
         isValid = false;
-    } else if (!/^[0-9]{4}-?[0-9]{4}$/.test(contact.phone)) {
+    } else if (!phoneRegex.test(contact.phone)) {
         showError("contactPhone", "contactPhoneError", "El teléfono debe tener formato 7777-8888 o 77778888.");
         isValid = false;
     }
@@ -210,13 +272,21 @@ function validateContact(contact) {
     if (contact.email === "") {
         showError("contactEmail", "contactEmailError", "El correo es obligatorio.");
         isValid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email)) {
+    } else if (contact.email.length > 80) {
+        showError("contactEmail", "contactEmailError", "El correo no debe superar los 80 caracteres.");
+        isValid = false;
+    } else if (!emailRegex.test(contact.email)) {
         showError("contactEmail", "contactEmailError", "Ingrese un correo válido.");
         isValid = false;
     }
 
     if (contact.category === "") {
         showError("contactCategory", "contactCategoryError", "Debe seleccionar una categoría.");
+        isValid = false;
+    }
+
+    if (contact.address.length > 100) {
+        showError("contactAddress", "contactAddressError", "La dirección no debe superar los 100 caracteres.");
         isValid = false;
     }
 
@@ -277,5 +347,88 @@ function renderContacts() {
     });
 }
 
-requestMetricsUpdate();
+function searchCountryInfo() {
+    const countryInput = document.getElementById("countrySearchInput");
+    const apiResult = document.getElementById("apiResult");
+
+    if (!countryInput || !apiResult) return;
+
+    const countryName = countryInput.value.trim();
+
+    if (countryName === "") {
+        apiResult.innerHTML = "<p>Ingrese el nombre de un país para buscar información.</p>";
+        return;
+    }
+
+    apiResult.innerHTML = "<p>Consultando información...</p>";
+
+    fetch(`https://restcountries.com/v3.1/name/${countryName}`)
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error("No se encontró información del país.");
+            }
+
+            return response.json();
+        })
+        .then(function (data) {
+            const country = data[0];
+
+            const name = country.name.common;
+            const capital = country.capital ? country.capital[0] : "No disponible";
+            const region = country.region;
+            const population = country.population.toLocaleString();
+            const flag = country.flag;
+
+            apiResult.innerHTML = `
+                <h3>Información obtenida desde API REST</h3>
+                <p><strong>País:</strong> ${name} ${flag}</p>
+                <p><strong>Capital:</strong> ${capital}</p>
+                <p><strong>Región:</strong> ${region}</p>
+                <p><strong>Población:</strong> ${population}</p>
+            `;
+
+            saveLastAction(`Se consultó información del país: ${name}.`);
+            showLastAction();
+        })
+        .catch(function (error) {
+            apiResult.innerHTML = `<p>${error.message}</p>`;
+        });
+}
+
+function getUserLocation() {
+    const locationResult = document.getElementById("locationResult");
+
+    if (!locationResult) return;
+
+    if (!navigator.geolocation) {
+        locationResult.innerHTML = "<p>La geolocalización no está disponible en este navegador.</p>";
+        return;
+    }
+
+    locationResult.innerHTML = "<p>Obteniendo ubicación...</p>";
+
+    navigator.geolocation.getCurrentPosition(
+        function (position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            locationResult.innerHTML = `
+                <h3>Ubicación del usuario</h3>
+                <p><strong>Latitud:</strong> ${latitude}</p>
+                <p><strong>Longitud:</strong> ${longitude}</p>
+            `;
+
+            saveLastAction("Se obtuvo la ubicación del usuario.");
+            showLastAction();
+        },
+        function () {
+            locationResult.innerHTML = "<p>No se pudo obtener la ubicación. Verifique los permisos del navegador.</p>";
+        }
+    );
+}
+
+
+loadContactsFromLocalStorage();
 renderContacts();
+requestMetricsUpdate();
+showLastAction();

@@ -55,14 +55,12 @@
             <input type="hidden" id="contactId">
 
             <div>
-                <label for="contactName">Nombre completo:</label>
-                <input type="text" id="contactName" placeholder="Ejemplo: Carlos Ramírez">
+                <input type="text" id="contactName" placeholder="Ejemplo: Diego Mena" maxlength="50" autocomplete="off">
                 <small id="contactNameError" class="error-message"></small>
             </div>
 
             <div>
-                <label for="contactPhone">Teléfono:</label>
-                <input type="text" id="contactPhone" placeholder="Ejemplo: 7777-8888">
+                <input type="text" id="contactPhone" placeholder="Ejemplo: 7777-8888" maxlength="9" autocomplete="off">
                 <small id="contactPhoneError" class="error-message"></small>
             </div>
 
@@ -104,6 +102,34 @@
             <button type="submit" id="saveContactButton">Guardar contacto</button>
             <button type="button" id="cancelEditButton" hidden>Cancelar edición</button>
         </form>
+    </section>
+
+    <section id="api-location-section">
+        <h2>API REST, Geolocalización y Almacenamiento Temporal</h2>
+
+        <div class="info-card">
+            <h3>Consulta de país</h3>
+            <p>Ingrese el nombre de un país para consultar información desde una API REST.</p>
+
+            <input type="text" id="countrySearchInput" placeholder="Ejemplo: El Salvador">
+            <button type="button" onclick="searchCountryInfo()">Buscar país</button>
+
+            <div id="apiResult"></div>
+        </div>
+
+        <div class="info-card">
+            <h3>Geolocalización</h3>
+            <p>Obtenga la ubicación actual del usuario mediante el navegador.</p>
+
+            <button type="button" onclick="getUserLocation()">Obtener ubicación</button>
+
+            <div id="locationResult"></div>
+        </div>
+
+        <div class="info-card">
+            <h3>Información temporal de sesión</h3>
+            <p id="lastActionInfo">No hay acciones recientes en esta sesión.</p>
+        </div>
     </section>
 
     <section>
